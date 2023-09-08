@@ -1,0 +1,461 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" sizes="16x16 32x32 64x64" href="img/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="shortcut icon" sizes="64x64" href="img/favicon-64.png">
+    <link rel="apple-touch-icon" href="img/icon-64x64.png">
+
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/foundation-icons.css">
+    <!-- <link rel="stylesheet" href="css/foundation-icons.svg">
+    <link rel="stylesheet" href="css/foundation-icons.eot">
+    <link rel="stylesheet" href="css/foundation-icons.ttf">-->
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="js/chosen/chosen.css">
+  </head>
+
+  <body>
+     <div class="grid-container">
+      <div class="grid-x grid-padding-x">
+        <div class="large-12 cell">
+          <h3> <img src="img/favicon-32.png" width="32" align="left" style="margin:5px"/> OntoTrek 3D Viewer</h3>
+        </div>
+      </div>
+
+      <div class="grid-x grid-padding-x">
+        <div class="large-8 cell">
+          <div class="callout" style="padding:0">
+            <div id="3d-graph">
+              <img src="img/introduction.png" style="margin:15px;border:2px solid silver" />
+            </div>
+<!--            <div id="minimap" style="position: absolute; bottom: 1300px; right: 10px; border: 2px solid silver;"></div>-->
+            <div style="padding:20px;">
+              <p>OntoTrek is an <a href="http://OBOFoundry.org" target="_blank">OBOFoundry.org</a> ontology terminology viewer that takes advantage of <a href="https://github.com/vasturiano/3d-force-graph/" target="_blank">WebGL 3d graph rendering software</a>. We have a few ontologies to choose from during this beta phase, some easy to load like AGRO and ECOCORE, and some big ones like CLO which can only be rendered by applying filters like "wireframe", no "labels", and limiting node depth.  Some ontologies demonstrate nice organization under the Basic Formal Ontology (BFO, whose 34 nodes are big, sunny, and always in the same position), and others show an independent streak which may illustrate the difference between reference and application ontologies. </p>
+
+              <p> OntoTrek displays all class-subclass relations starting from the first top-level entity it finds (usually owl:Thing or BFO:0000001 entity).  OntoTrek doesn't draw other object relations. </p>
+
+              <p><b>To begin, select an ontology, or enter an ontology URL in upper right "Search" tab and it will be displayed above.</b>  Alternately, enter a .owl file URL directly (it must be in rdf/xml format, and can't be a URL that redirects, so for github-hosted ontologies use the "raw.githubusercontent.com/..." link, e.g. https://raw.githubusercontent.com/obi-ontology/obi/master/obi.owl).</p> 
+
+              <p>Note a current subtle bug is that settings applied to a graph yield successively slower redraws. To play with settings, reload the app in the browser, select settings, and then select an ontology.</p>
+
+              <p>This software is being developed at the Centre for Infectious Disease Genomics and One Health at Simon Fraser University. The project's GitHub is  <a href="https://github.com/GenEpiO/ontotrek" target="_blank">here</a>.  Contact <a href="mailto:damion.dooley@bccdc.ca">Damion Dooley</a> for more information.</p>
+            </div>
+
+          </div>
+        </div>
+        <div class="large-4 cell" style="
+    padding-left: 100px;
+">
+          <ul class="tabs" data-tabs id="example-tabs">
+            <li class="tabs-title is-active">
+                <a href="#panel_search" aria-selected="true">Search</a>
+            </li>
+            <li class="tabs-title">
+              <a data-tabs-target="panel_settings" href="#panel_settings">Settings</a>
+            </li>
+            <li class="tabs-title">
+              <a data-tabs-target="panel_legend" href="#panel_legend">Legend</a>
+            </li>
+            <li class="tabs-title">
+              <a data-tabs-target="panel_indented_list" href="#panel_indented_list">Overview</a>
+            </li>
+            <li class="tabs-title">
+              <a data-tabs-target="panel_help" href="#panel_help">Help</a>
+            </li>
+          </ul>
+
+
+          <div class="tabs-content" data-tabs-content="example-tabs" style="min-height:550px;overflow-y:scroll">
+
+            <!-- **************************** SEARCH ************************ -->
+            <div class="tabs-panel is-active" id="panel_search">
+              <div class="callout primary">
+
+                <div class="grid-x grid-padding-x" style="margin-bottom:10px;padding:5px;background-color:silver">
+
+                  A) Select a cached ontology to view &nbsp;
+                  <i class="fi-info blue" data-tooltip tabindex="1" title="The listed ontologies are mainly from OBO Foundry (http://obofoundry.org). Many illustrate the interleaved reuse of OBOFoundry ontology terms."></i>
+  
+                  <select id="ontology" style="margin-bottom:10px">
+                      <option value="">Select an ontology ...</option>
+
+                      <option value="data/bfo.owl" data-cache="data/trees/bfo.json">BFO: Basic Formal Ontology</option><!-- https://raw.githubusercontent.com/BFO-ontology/BFO/master/releases/2.0/bfo.owl -->
+
+                      <option value="data/dolche-inferred.owl" data-cache="data/trees/dolce.json">DOLCE-Lite: Descriptive Ontology for Linguistic and Cognitive Engineering</option><!-- http://genepio.org/ontotrek/data/dolche-inferred.owl -->
+
+                      <option value="data/gfo.owl" data-cache="data/trees/gfo.json">GFO: General Formal Ontology</option><!-- http://www.onto-med.de/ontologies/gfo.owl -->
+
+                      <option disabled="disabled">__________________________________________</option>
+
+                      <option value="data/agro.owl" data-cache="data/trees/agro.json">AGRO: Agronomy Ontology</option>
+                      <option value="//raw.githubusercontent.com/AgriculturalSemantics/agro/master/agro.owl">AGRO via URL</option>
+                      <option value="data/aro.owl" data-cache="data/trees/aro.json">ARO: Antibiotic Resistance Ontology (4K nodes)</option>
+                      <option value="//raw.githubusercontent.com/CLO-ontology/CLO/master/src/ontology/clo_merged.owl">CLO: Cell Line Ontology (needs filtering! 40K)</option> 
+                      <option value="data/cmo.owl" data-cache="data/trees/cmo.json">CMO: Clinical Measurements Ontology</option>  
+                      <option value="https://raw.githubusercontent.com/DiseaseOntology/HumanDiseaseOntology/master/src/ontology/doid.owl" data-cache="data/trees/doid.json">DOID: Human Disease Ontology</option>
+
+                      <option value="https://raw.githubusercontent.com/evidenceontology/evidenceontology/master/eco.owl" data-cache="data/trees/eco.json">ECO: Evidence & Conclusion Ontology</option>  
+                      <option value="//raw.githubusercontent.com/EcologicalSemantics/ecocore/master/ecocore.owl" data-cache="data/trees/ecocore.json">ECOCORE: Ontology of Core Ecological Entities</option>  
+                      <option value="//raw.githubusercontent.com/FoodOntology/foodon/master/src/ontology/foodon-merged.owl">FOODON: Food Ontology (needs filtering! 28K)</option> 
+                      <option value="data/foodon-products.json" data-cache="data/trees/foodon-products.json">FOODON product branch (11K)</option> 
+                      <option value="data/genepio-merged.owl" data-cache="data/trees/genepio.json">GENEPIO: Genomic Epidemiology Ontology</option> 
+
+                      <option value="//raw.githubusercontent.com/EBISPOT/ancestro/master/hancestro.owl" data-cache="data/trees/hancestro.json">HANCESTRO: Human Ancestry Ontology</option>
+                      <option value="//raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.owl">HP: Human Phenotype Ontology (needs filtering! 40k)</option>
+                      <option value="https://raw.githubusercontent.com/obophenotype/mouse-anatomy-ontology/master/emapa.owl" data-cache="data/trees/emapa.json">EMAPA: Ontologies for mouse anatomy and development</option>                    
+                      <option value="//raw.githubusercontent.com/infectious-disease-ontology/infectious-disease-ontology/2017-11-03/ido.owl" data-cache="data/trees/ido.json">IDO: Infectious Disease Ontology</option>
+                      <option value="//raw.githubusercontent.com/obi-ontology/obi/v2019-08-06/obi.owl" data-cache="data/trees/obi.json">OBI: Ontology for Biomedical Investigations</option>
+                      <option value="//raw.githubusercontent.com/biobanking/ontology/20190620/obib.owl" data-cache="data/trees/obib.json">OBIB: Ontology for Biobanking</option>           
+                      <option value="//raw.githubusercontent.com/pato-ontology/pato/master/pato.owl">PATO: Phenotype and Trait Ontology</option>          
+                      <option value="//raw.githubusercontent.com/PopulationAndCommunityOntology/pco/master/pco.owl" data-cache="data/trees/pco.json">PCO: Population and Community Ontology</option>   
+                      <option value="//raw.githubusercontent.com/Planteome/plant-ontology/master/po.owl" data-cache="data/trees/po.json">PO: Plant Ontology (anatomical branch)</option> 
+                      <option value="data/zfa.owl" data-cache="data/trees/zfa.json">ZFA: Zebrafish anatomy and development ontology</option> 
+                  </select>
+
+                </div>
+               
+                <div class="grid-x grid-padding-x" style="margin-bottom:10px;padding:5px;background-color:silver">
+
+                  B) Or enter a URL to an online ontology &nbsp;
+                  <i class="fi-info blue" data-tooltip tabindex="1" title="Provide your own ontology URL.  The ontology should be formatted as an OWL rdf/xml file. Currently all terms which are owl:subClassOf owl:Thing are retrieved.  If subclasses are inferred in your ontology, you will need to create an explicit version of it by using a reasoner and saving the output to an OWL file."></i>
+
+                  <div class="large-10 medium-10">
+                     <input type="text" id="ontology_url" name="ontology_url" placeholder="Ontology URL" value="">
+                  </div>
+                  <div class="large-2 medium-2">
+                    <button id="ontology_url_button" class="button" style="padding:.7rem .4rem;">Load</button>
+                  </div>
+
+                  <!--
+                  <label for="upload_cache">
+                    If this ontology has a cache file, upload it here first:<br/>
+                  </label>
+                  <input type="file" id="upload_cache" accept=".json" placeholder="Cache file">
+                  <button id="upload_json_button" class="button">Upload</button>
+                  -->
+
+                </div>
+                
+                <div class="large-2 medium-2">
+                 
+                </div>
+
+                <div id="status"><span class="placeholder">&nbsp;</span></div>
+
+                <div class="large-2 medium-2">
+                  <button id="center_graph" class="button" style="background-color:#4CAF50; visibility: hidden;"
+                          onmouseover="this.style.backgroundColor='green';"
+                          onmouseout="this.style.backgroundColor='#4CAF50';">Recenter Graph</button>
+                </div>
+
+                <div class="large-2 medium-2">
+                  <button id="clear_highlight" class="button" style="background-color:#FF7000; visibility: hidden;"
+                          onmouseover="this.style.backgroundColor='orange';"
+                          onmouseout="this.style.backgroundColor='#FF7000';">Clear All Selections <i class="fi-info blue" data-tooltip tabindex="2" title="NOTE : Can also right click anywhere on the background to clear all selections "></i></button>
+
+                </div>
+                <div class="large-2 medium-2">
+                  <button id="pause_motion" class="button" style="background-color: dodgerblue; visibility: hidden;"
+                          onmouseover="this.style.backgroundColor='deepskyblue';"
+                          onmouseout="this.style.backgroundColor='dodgerblue';">Pause Animation</button>
+                </div>
+
+<!--                <div class="large-2 medium-2">-->
+<!--                  <button id="rerender_button" class="button" style="visibility: hidden;">Re-render ontology</button>-->
+<!--                </div>-->
+
+<!--                <div class="large-2 medium-2">-->
+<!--                  <button id="download_button" class="button" style="visibility: hidden;">Download cache snapshot</button>-->
+<!--                </div>-->
+
+              </div>
+
+              <div class="callout primary">
+
+                <i class="fi-info blue" data-tooltip tabindex="2" title="You can search ontology terms by synonym too!"></i> 
+                Search for terms</span> to navigate to
+
+                <select id="label_search" class="regular text"></select>
+              </div>
+
+              <div class="callout primary">
+                <i class="fi-info blue" data-tooltip tabindex="2" title="Click on a listed parent or on a child listed in the pulldown menu to focus on it."></i>
+
+                Navigate by term context
+
+                <div id="parents" class="text"><span class="placeholder">parent(s)</span></div>
+                <!-- div id="term_id" class="text"><span class="placeholder">id</span></div -->
+                <div id="label" class="text">
+                  <span class="placeholder">label</span>
+                </div>
+                <div id="children">
+                  <select id="select_child">
+                    <option disabled="disabled">children will be displayed here</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <div class="callout secondary">
+                <div id="definition" class="text">
+                  <span class="placeholder">definition</span>
+                </div>
+                <div id="synonyms" class="text">
+                  <span class="placeholder">synonyms</span>
+                </div>
+                <div id="ui_label" class="text">
+                  <span class="placeholder">UI label</span>
+                </div>
+                <div id="ui_definition" class="text">
+                  <span class="placeholder">UI definition</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- **************************** SETTINGS ************************ -->
+            <div class="tabs-panel" id="panel_settings">
+
+              <div class="callout primary">
+
+
+                <div class="grid-x grid-padding-x">
+
+                  <div class="large-12 medium-12 cell">
+                    <i class="fi-info blue" data-tooltip tabindex="2" title="Color coding is done according to lookup tables for ontology prefixes and Basic Formal Ontology terms as defined in js/lookup_tables.js; Select ontology to have edges colored by ontology of child node; select Upper Level Ontology (ULO) branch to have edges colored by occurent, continuant, process, etc."></i>
+                    <label>Color edges by</label>
+                    <input type="radio" name="ulo_edge_coloring" value="false" id="edge_coloring_onto" checked="checked"><label for="edge_coloring_onto">Term ontology</label> &nbsp; &nbsp; 
+                    <input type="radio" name="ulo_edge_coloring" value="true" id="edge_coloring_bfo"><label for="edge_coloring_bfo">ULO branch</label>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="switch float-left">
+                <input class="switch-input" id="render_labels" type="checkbox" name="render_labels" checked = "checked">
+                <label class="switch-paddle" for="render_labels">
+                  <span class="show-for-sr">Show labels</span>
+                </label>
+              </div>
+              <label for="render_labels"> Show labels. This slows rendering a bit.</label>
+              <br clear="both"/>
+
+              <!-- AFter adding new OWL format, this function was broken. 
+
+              <div class="switch float-left">
+                <input class="switch-input" id="render_other_parents" type="checkbox" name="render_other_parents">
+                <label class="switch-paddle" for="render_other_parents">
+                  <span class="show-for-sr">Show other term parents</span>
+                </label>
+              </div>
+              <i class="fi-info blue" data-tooltip title="Other parent links are shown in orange.  These are not inferred.  A term's primary parent is currently somewhat arbitrary."></i>
+              <label for="render_other_parents">Experimental: Show a term's other parent links</label>
+              <br clear="both"/>
+              -->
+
+              <div class="switch float-left">
+                <input class="switch-input" id="render_relationships"  style="visibility: hidden;" type="checkbox" name="render_relationships" >
+                <label class="switch-paddle" for="render_relationships">
+                  <span class="show-for-sr">Render All Relationships</span>
+                </label>
+              </div>
+              <label for="render_relationships"> Render All Relationships<i class="fi-info blue" data-tooltip tabindex="2" title="Currently, only subsumptions are displayed. Enabling this option will render additional lateral relationships between concepts in the ontology. NOTE: Links will be coloured according to the relationship they represent"></i>
+              </label>
+              <br clear="both"/>
+
+
+              <div class="switch float-left">
+                <input class="switch-input" id="high_contrast"  style="visibility: hidden;" type="checkbox" name="high_contrast" >
+                <label class="switch-paddle" for="high_contrast">
+                  <span class="show-for-sr">Light Mode (Higher Contrast)</span>
+                </label>
+              </div>
+              <label for="high_contrast"> Light Mode (Higher Contrast) </label>
+              <br clear="both"/>
+
+              <div class="switch float-left">
+                <input class="switch-input" id="show_clusters"  style="visibility: hidden;" type="checkbox" name="show_clusters" >
+                <label class="switch-paddle" for="show_clusters">
+                  <span class="show-for-sr">Indicate Clusters</span>
+                </label>
+              </div>
+              <label for="show_clusters"> Indicate Clusters <i class="fi-info blue" data-tooltip tabindex="2" title="Enabling this option will render a circular indicator around each node which is scaled based on the number of children that node has. Large clusters (a node with many children) can easily be identified and queried.  "></i></label>
+              <br clear="both"/>
+
+<!--              <div class="switch float-left">-->
+<!--                <input class="switch-input" id="render_deprecated" type="checkbox" name="render_deprecated">-->
+<!--                <label class="switch-paddle" for="render_deprecated">-->
+<!--                  <span class="show-for-sr">show deprecated terms</span>-->
+<!--                </label>-->
+<!--              </div>-->
+<!--              <label for="render_deprecated">Show deprecated terms</label>-->
+<!--              <br clear="both"/>-->
+
+<!--              <div class="switch float-left">-->
+<!--                <input class="switch-input" id="render_quicker" type="checkbox" name="render_quicker">-->
+<!--                <label class="switch-paddle" for="render_quicker">-->
+<!--                  <span class="show-for-sr">render wireframe</span>-->
+<!--                </label>-->
+<!--              </div>-->
+<!--              <label for="render_quicker"> Show a wireframe view (skinny edges) for all but ULO</label>-->
+<!--              <br clear="both"/>-->
+
+
+<!--              <div class="switch float-left">-->
+<!--                <input class="switch-input" id="render_slices" type="checkbox" name="render_slices">-->
+<!--                <label class="switch-paddle" for="render_slices">-->
+<!--                  <span class="show-for-sr">render slices</span>-->
+<!--                </label>-->
+<!--              </div>-->
+<!--              <label for="render_slices"> Underlying ontology branches rendered as vertical slice(s)</label>-->
+<!--              <br clear="both"/>-->
+
+<!--              <select id="render_dimensions" class="float-left">-->
+<!--                <option value = "3" selected="selected">3D</option>-->
+<!--                <option value = "2">2D</option>-->
+<!--              </select>-->
+<!--              <label>3D view is shown by default; a 2D view is possible too</label>-->
+<!--              <br clear="both"/>-->
+              <!--
+              <input type="checkbox" id="render_galaxy">
+              <label for="render_galaxy">galactic</label><br/>
+              -->
+
+<!--              <select id="thickness_control" class="float-left">-->
+<!--                <option value=".5">.5</option>-->
+<!--                <option value="1" >1</option>-->
+<!--                <option value="2" selected="selected">2</option>-->
+<!--                <option value="3">3</option>-->
+<!--                <option value="5">5</option>-->
+<!--              </select>-->
+<!--              <label for="thickness_control">Render deeper edges with this thickness</label>-->
+<!--              <br clear="both">-->
+
+<!--              <select id="depth_control" class="float-left">-->
+<!--                <option value="50">all</option>-->
+<!--                <option value="4">4</option>-->
+<!--                <option value="5">5</option>-->
+<!--                <option value="6">6</option>-->
+<!--                <option value="7">7</option>-->
+<!--                <option value="7">8</option>-->
+<!--                <option value="7">9</option>-->
+<!--                <option value="10">10</option>-->
+<!--                <option value="15">15</option>-->
+<!--              </select>-->
+<!--              <label for="depth_control" class="middle">Render from top down to this node depth</label>-->
+<!--              <label for="render_layer_depth" class="middle">Length of Edges</label>-->
+
+              <select id="render_layer_depth" class="float-left" style="width:130px">
+                <option value="1000">Tall</option>
+                <option value="500" selected="selected">Default</option>
+                <option value="300">Shallow</option>
+              </select>
+              <label for="render_layer_depth" class="middle">Length of Edges</label>
+
+<!--              <i class="fi-info blue" data-tooltip tabindex="2" title="Will highlight all parents (highlighted in orange) of a given node up to the root node."></i>-->
+<!--              <i class="fi-info blue" data-tooltip tabindex="2" title="Will highlight the direct children (highlighted in yellow) of a given node"></i>-->
+<!--              <i class="fi-info blue" data-tooltip tabindex="2" title="Will highlight all children (highlighted in yellow) of a given node up to the leaf nodes"></i>-->
+<!--              <i class="fi-info blue" data-tooltip tabindex="2" title="Will highlight the direct children (yellow) and direct parent (orange) of a node. If 'Render Relationships' is enabled, will also highlight any nodes with direct relationships to the selected node"></i>-->
+
+
+
+              <select id="highlight_option" class="float-left" style="width:130px">
+                <option value="Root" selected="selected">Path Up To Root Node </option>
+                <option value="ImmediateChildren"> Immediate Children</option>
+                <option value="AllChildren">All Children</option>
+                <option value="AllDirectRelationships">All Direct Relationships</option>
+              </select>
+              <label for="highlight_option" class="middle">Highlight Mode <i class="fi-info blue" data-tooltip tabindex="2" title="NOTE : To highlight, right-click a node. To deselect, right click anywhere in the background. Children nodes will be indicated in yellow and parents in orange "></i></label>
+
+
+<!--              <select id="children_depth" class="float-left" style="width:130px">-->
+<!--                <option value="1" selected="selected">1</option>-->
+<!--                <option value="2">2</option>-->
+<!--                <option value="3">3</option>-->
+<!--                <option value="4">4</option>-->
+<!--                <option value="5">5</option>-->
+<!--                <option value="all">all</option>-->
+<!--              </select>-->
+<!--              <label for="children_depth" class="middle">Max Number of Levels of Children to Highlight</label>-->
+
+              <label for="text_size" class="align-left">Font Size</label>
+              <input type="range" id="text_size" class="float-left" style="width:130px" min="4" max="16" value="6">
+              <br clear="both"/>
+
+
+              <label for="repulsion" class="align-left">Graph Spacing</label>
+              <input type="range" id="repulsion" class="float-left" style="width:130px" min="1000" max="20000" value="5000">
+              <br clear="both"/>
+              
+            </div>
+
+            <!-- **************************** LEGEND ************************ -->
+            <div class="tabs-panel" id="panel_legend">
+              <div class="grid-x grid-padding-x">
+                <div id="ontology_legend">Select an ontology to view it; a legend of component ontologies and upper level ontology branches, and the counts of nodes belonging to them, will be displayed here</div>
+                <div id="ulo_legend"></div>
+              </div>
+            </div>
+
+            <div class="tabs-panel" id="panel_indented_list">
+              <div class="grid-x grid-padding-x">
+                <div id="node_list">Select an ontology to view an overview of nodes in the ontology</div>
+              </div>
+            </div>
+
+
+
+            <!-- **************************** HELP ************************ -->
+            <div class="tabs-panel" id="panel_help">
+              <p>Note that it can take a while to render an ontology, and until rendering is complete, changing settings or attempting to navigate to terms may not work.</p>
+
+              <p><b>Viewport navigation:</b></p>
+              <p>While your cursor is positioned over the display viewport, both mouse and trackpad take on the following functions:</p>
+
+              <p>Click on a node to focus on it; view will rotate and move towards that item. Clicking on a link will take you to its child (lower depth) node.</p>
+
+              <p><b>Trackpad:</b><br/>
+              Zoom: 2 finger motion up and down (no motion sideways).<br/>
+              Pan: 2 finger + click and hold mouse. Rotate: 3 finger motion.
+              </p>
+
+              <p><b>Mouse:</b><br/> 
+                Zoom: move + click/hold right button or D key.<br/>
+              Rotate: move + click/hold left button or A key.<br/>
+              Rotate: move + click/hold middle button or S key.
+            </p>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    <!-- textarea id="dump" rows="10" cols="50"></textarea>-->
+
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/what-input.js"></script>
+    <script src="js/vendor/foundation.js"></script>
+
+
+    <!-- <script src="js/jquery-3.3.1.slim.min.js"></script> -->
+    <!-- customized version of chosen.js that looks for synonyms too -->
+    <script src="js/chosen/chosen.jquery.min.js"></script>
+    <script src="js/bundle.js"></script>
+       <script src="https://d3js.org/d3.v6.min.js"></script>
+    <!-- Fetched from: script src="//unpkg.com/3d-force-graph"></script -->    
+    <script src="js/3d-force-graph.min.js"></script>
+    <script src="js/lookup_tables.js"></script>
+    <script src="js/development.js"></script>
+    <script src="js/owl.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/rdflib.min.js"></script>
+    <script src="https://unpkg.com/three/examples/js/exporters/GLTFExporter.js"></script>
+<!--       <script src="https://d3js.org/d3.v7.min.js"></script>-->
+
+  </body>
+</html>
