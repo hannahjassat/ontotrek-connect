@@ -144,6 +144,13 @@ function process_ontology(store) {
   return resource;
 }
 
+
+function getObjectPropertyLabel(store, objectPropertyURI) {
+  var objectProperty = store.sym(objectPropertyURI);
+  var label = store.any(objectProperty, rdflib_url('rdfs:label'));
+  return label ? label.value : null;
+}
+
 function get_restrictions(resource, node, store, subject) {
   var restrictions = store.each(subject, rdflib_url('rdfs:subClassOf'));
 
@@ -154,9 +161,14 @@ function get_restrictions(resource, node, store, subject) {
       var allValuesFrom = store.any(restriction, rdflib_url('owl:allValuesFrom'));
 
       if (onProperty) {
-        var restrictionTriple = {
-          onProperty: namespace(resource, onProperty.uri),
-        };
+
+
+          var restrictionTriple = {
+            onProperty: namespace(resource, onProperty.uri),
+            onPropertyLabel : namespace(resource, getObjectPropertyLabel(store, onProperty.uri))
+          };
+
+        
 
         if (someValuesFrom) {
           restrictionTriple.someValuesFrom = namespace(resource, someValuesFrom.uri);

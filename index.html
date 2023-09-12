@@ -22,7 +22,7 @@
      <div class="grid-container">
       <div class="grid-x grid-padding-x">
         <div class="large-12 cell">
-          <h3> <img src="img/favicon-32.png" width="32" align="left" style="margin:5px"/> OntoTrek 3D Viewer</h3>
+          <h3> <img src="img/favicon-32.png" width="32" align="left" style="margin:5px"/> OntoTrek:<b>Connect</b></h3>
         </div>
       </div>
 
@@ -30,19 +30,15 @@
         <div class="large-8 cell">
           <div class="callout" style="padding:0">
             <div id="3d-graph">
-              <img src="img/introduction.png" style="margin:15px;border:2px solid silver" />
+              <img src="img/connect.png" style="margin:15px;border:2px solid silver;width: 750px;">
             </div>
 <!--            <div id="minimap" style="position: absolute; bottom: 1300px; right: 10px; border: 2px solid silver;"></div>-->
             <div style="padding:20px;">
-              <p>OntoTrek is an <a href="http://OBOFoundry.org" target="_blank">OBOFoundry.org</a> ontology terminology viewer that takes advantage of <a href="https://github.com/vasturiano/3d-force-graph/" target="_blank">WebGL 3d graph rendering software</a>. We have a few ontologies to choose from during this beta phase, some easy to load like AGRO and ECOCORE, and some big ones like CLO which can only be rendered by applying filters like "wireframe", no "labels", and limiting node depth.  Some ontologies demonstrate nice organization under the Basic Formal Ontology (BFO, whose 34 nodes are big, sunny, and always in the same position), and others show an independent streak which may illustrate the difference between reference and application ontologies. </p>
+              <p>OntoTrek:Connect is an extension of OntoTrek 3D viewer - an <a href="http://OBOFoundry.org" target="_blank">OBOFoundry.org</a> ontology terminology viewer that takes advantage of <a href="https://github.com/vasturiano/3d-force-graph/" target="_blank">WebGL 3d graph rendering software</a>.  </p>
 
-              <p> OntoTrek displays all class-subclass relations starting from the first top-level entity it finds (usually owl:Thing or BFO:0000001 entity).  OntoTrek doesn't draw other object relations. </p>
+              <p> OntoTrek, by default, displays all class-subclass relations starting from the first top-level entity it finds (usually owl:Thing or BFO:0000001 entity). The "Render All Relationship" toggle found in Settings allows the user to visualise additional non-hierarchical relationships </p>
 
               <p><b>To begin, select an ontology, or enter an ontology URL in upper right "Search" tab and it will be displayed above.</b>  Alternately, enter a .owl file URL directly (it must be in rdf/xml format, and can't be a URL that redirects, so for github-hosted ontologies use the "raw.githubusercontent.com/..." link, e.g. https://raw.githubusercontent.com/obi-ontology/obi/master/obi.owl).</p> 
-
-              <p>Note a current subtle bug is that settings applied to a graph yield successively slower redraws. To play with settings, reload the app in the browser, select settings, and then select an ontology.</p>
-
-              <p>This software is being developed at the Centre for Infectious Disease Genomics and One Health at Simon Fraser University. The project's GitHub is  <a href="https://github.com/GenEpiO/ontotrek" target="_blank">here</a>.  Contact <a href="mailto:damion.dooley@bccdc.ca">Damion Dooley</a> for more information.</p>
             </div>
 
           </div>

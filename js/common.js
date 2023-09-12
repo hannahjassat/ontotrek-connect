@@ -267,8 +267,12 @@ function init_interface() {
 
   // Top level setting controls whether shortcuts on rendering speed things up
   $("#render_relationships").on('change', function(item) {
-    RENDER_RELATIONSHIPS = this.checked
+      RENDER_RELATIONSHIPS = this.checked
+    if(ONTOLOGY)
+    {
       load_data(ONTOLOGY, load_graph);
+    }
+
     })
 
 

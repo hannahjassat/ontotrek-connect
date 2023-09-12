@@ -115,6 +115,8 @@ function getRandomAvailableColor() {
 }
 
 
+
+
 const colorMap = {}; // To store generated colors for object properties
 function processGraphWithRestrictions(node,links) {
 
@@ -126,46 +128,60 @@ function processGraphWithRestrictions(node,links) {
   if (node.restrictionTriples && node.restrictionTriples.length > 0) {
     for (const restrictionTriple of node.restrictionTriples) {
 
-      const objectProperty = restrictionTriple.onProperty.match(LABEL_RE2);
+      var label = restrictionTriple.onProperty.match(LABEL_RE2);
+      if(restrictionTriple.onPropertyLabel)
+      {
+        label = restrictionTriple.onPropertyLabel;
+      }
 
       // Check if a color has already been generated for this object property
-      if (!colorMap[objectProperty]) {
-        colorMap[objectProperty] = getRandomAvailableColor(); // Generate a random color
+      if (!colorMap[label]) {
+        colorMap[label] = getRandomAvailableColor(); // Generate a random color
       }
 
       if (restrictionTriple.allValuesFrom) {
-        // Create a new link from the current node to the someValuesOf node
-        var link = {
-          source: node,
-          target: top.dataLookup[restrictionTriple.allValuesFrom],
-          label: node.label +" ⊑ ∀" + restrictionTriple.onProperty.match(LABEL_RE2) + "." + top.dataLookup[restrictionTriple.allValuesFrom].label   ,
-          //each source onProperty's only target
-          highlight_color: colorMap[objectProperty], // Hex or string
-          width: 30,
-          other: restrictionTriple.onProperty.match(LABEL_RE2)
-          //other: "Each " + node.label + " is " + restrictionTriple.onProperty.match(LABEL_RE2)+ " only " + top.dataLookup[restrictionTriple.allValuesFrom].label
-        };
-        // Check if the source and target nodes are the same
-        if (link.source !== link.target) {
-          links.push(link);
+
+
+
+        if(node != undefined && top.dataLookup[restrictionTriple.allValuesFrom] != undefined)
+        {
+          // Create a new link from the current node to the someValuesOf node
+          var link = {
+            source: node,
+            target: top.dataLookup[restrictionTriple.allValuesFrom],
+            label:  node.label +" ⊑ ∀" + label+ "." + top.dataLookup[restrictionTriple.allValuesFrom].label   ,
+            //each source onProperty's only target
+            highlight_color: colorMap[label], // Hex or string
+            width: 30,
+            other: label
+            //other: "Each " + node.label + " is " + restrictionTriple.onProperty.match(LABEL_RE2)+ " only " + top.dataLookup[restrictionTriple.allValuesFrom].label
+          };
+          // Check if the source and target nodes are the same
+          if (link.source !== link.target) {
+            links.push(link);
+          }
         }
+
 
       }
       if (restrictionTriple.someValuesFrom) {
+
         // Create a new link from the current node to the someValuesOf node
-        var link = {
-          source: node,
-          target: top.dataLookup[restrictionTriple.someValuesFrom],
-          label: node.label +" ⊑ ∃" + restrictionTriple.onProperty.match(LABEL_RE2) + "." + top.dataLookup[restrictionTriple.someValuesFrom].label   ,
-          //each source onProperty's some target
-          highlight_color: colorMap[objectProperty], // Hex or string
-          width: 5,
-          other: restrictionTriple.onProperty.match(LABEL_RE2)
-          //other: "Each " + node.label + " is " + restrictionTriple.onProperty.match(LABEL_RE2)+ " some " + top.dataLookup[restrictionTriple.someValuesFrom].label
-        };
-        // Check if the source and target nodes are the same
-        if (link.source !== link.target) {
-          links.push(link);
+        if(node != undefined && top.dataLookup[restrictionTriple.someValuesFrom] != undefined) {
+          var link = {
+            source: node,
+            target: top.dataLookup[restrictionTriple.someValuesFrom],
+            label: node.label +" ⊑ ∃" + label + "." + top.dataLookup[restrictionTriple.someValuesFrom].label   ,
+            //each source onProperty's some target
+            highlight_color: colorMap[label], // Hex or string
+            width: 5,
+            other: label
+            //other: "Each " + node.label + " is " + restrictionTriple.onProperty.match(LABEL_RE2)+ " some " + top.dataLookup[restrictionTriple.someValuesFrom].label
+          };
+          // Check if the source and target nodes are the same
+          if (link.source !== link.target) {
+            links.push(link);
+          }
         }
 
       }
