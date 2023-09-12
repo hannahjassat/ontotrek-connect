@@ -1,1 +1,2 @@
-# OntoTrek+
+# OntoTrek:Connect
+
